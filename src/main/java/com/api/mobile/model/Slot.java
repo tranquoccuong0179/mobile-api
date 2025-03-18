@@ -10,6 +10,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.sql.Date;
+import java.sql.Time;
 import java.util.List;
 
 @Entity
@@ -17,17 +19,15 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
-public class Field extends BaseEntity{
-    private String location;
-    private double price;
+public class Slot extends BaseEntity{
+    Time startTime;
+    Time endTime;
+    Date slotDate;
     @ManyToOne
-    @JoinColumn(name = "admin_id")
+    @JoinColumn(name = "field_id")
     @JsonIgnore
-    private Admin admin;
-    @OneToMany(mappedBy = "field")
-    private List<Slot> slots;
-    @ManyToOne
-    @JoinColumn(name = "category_id")
-    @JsonIgnore
-    private Category category;
+    private Field field;
+
+    @OneToMany(mappedBy = "slot")
+    private List<Booking> bookings;
 }

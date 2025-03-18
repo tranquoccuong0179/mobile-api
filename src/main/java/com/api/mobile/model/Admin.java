@@ -3,8 +3,8 @@ package com.api.mobile.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,17 +17,11 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
-public class Field extends BaseEntity{
-    private String location;
-    private double price;
-    @ManyToOne
-    @JoinColumn(name = "admin_id")
+public class Admin extends BaseEntity {
+    @OneToOne
+    @JoinColumn(name = "user_id")
     @JsonIgnore
-    private Admin admin;
-    @OneToMany(mappedBy = "field")
-    private List<Slot> slots;
-    @ManyToOne
-    @JoinColumn(name = "category_id")
-    @JsonIgnore
-    private Category category;
+    private User user;
+    @OneToMany(mappedBy = "admin")
+    private List<Field> fields;
 }

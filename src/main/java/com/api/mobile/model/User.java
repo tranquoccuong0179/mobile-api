@@ -25,8 +25,4 @@ public class User extends BaseEntity {
     private String fullName;
     @Enumerated(EnumType.STRING)
     private RoleEnum role;
-    @OneToMany(mappedBy = "user")
-    private List<Field> fields;
-    @OneToMany(mappedBy = "user")
-    private List<Booking> bookings;
 }

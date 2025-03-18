@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,12 +19,16 @@ import java.time.LocalDate;
 @Setter
 public class Booking extends BaseEntity{
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "customer_id")
     @JsonIgnore
-    private User user;
+    private Customer customer;
     @ManyToOne
     @JoinColumn(name = "field_id")
     @JsonIgnore
     private Field field;
     private LocalDate date;
+    @ManyToOne
+    @JoinColumn(name = "slot_id")
+    @JsonIgnore
+    private Slot slot;
 }
