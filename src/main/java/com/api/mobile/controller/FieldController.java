@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,6 +22,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class FieldController {
     private final FieldService fieldService;
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<APIResponse<CreateFieldResponse>> create(@RequestBody CreateFieldRequest request){
         CreateFieldResponse response = fieldService.createField(request);
@@ -38,11 +40,13 @@ public class FieldController {
         return ResponseEntity.ok(new APIResponse<>(HttpStatus.OK.toString(), "Field thành công", response));
     }
     @PutMapping(value = "/update/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<APIResponse<UpdateFieldResponse>> update(@PathVariable UUID id, @RequestBody UpdateFieldRequest request) {
         UpdateFieldResponse response = fieldService.updateField(id, request);
         return ResponseEntity.ok(new APIResponse<>(HttpStatus.OK.toString(), "Cập nhật thành công", response));
     }
     @DeleteMapping(value = "/delete/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<APIResponse<String>> delete(@PathVariable UUID id) {
         boolean deleted = fieldService.deleteField(id);
         if (deleted) {
