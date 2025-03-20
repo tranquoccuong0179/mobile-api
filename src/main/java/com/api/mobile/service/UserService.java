@@ -10,5 +10,6 @@ import org.springframework.http.ResponseEntity;
 
 public interface UserService {
     public RegisterAccountResponse Register(RegisterAccountRequest registerAccountRequest);
+    public RegisterAccountResponse RegisterAdmin(RegisterAccountRequest registerAccountRequest);
     public AuthenticationResponse Auth(AuthenticateRequest authenticateRequest);
 }
