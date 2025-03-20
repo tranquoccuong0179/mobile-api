@@ -6,8 +6,10 @@ import com.api.mobile.dto.response.APIResponse;
 import com.api.mobile.dto.response.AuthenticationResponse;
 import com.api.mobile.dto.response.RegisterAccountResponse;
 import com.api.mobile.enums.RoleEnum;
+import com.api.mobile.model.Admin;
 import com.api.mobile.model.Customer;
 import com.api.mobile.model.User;
+import com.api.mobile.repository.AdminRepository;
 import com.api.mobile.repository.CustomerRepository;
 import com.api.mobile.repository.UserRepository;
 import com.api.mobile.service.UserService;
@@ -29,6 +31,7 @@ public class UserServiceImpl implements UserService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final CustomerRepository customerRepository;
+    private final AdminRepository adminRepository;
     @Override
     public RegisterAccountResponse Register(RegisterAccountRequest registerAccountRequest) {
         User user = new User();
@@ -73,9 +76,9 @@ public class UserServiceImpl implements UserService {
         user.setActive(true);
         userRepository.save(user);
 
-        Customer customer = new Customer();
-        customer.setUser(user);
-        customerRepository.save(customer);
+        Admin admin = new Admin();
+        admin.setUser(user);
+        adminRepository.save(admin);
 
         RegisterAccountResponse response = new RegisterAccountResponse();
         response.setId(user.getId());
@@ -84,7 +87,7 @@ public class UserServiceImpl implements UserService {
         response.setFullName(user.getFullName());
         response.setPhone(user.getPhone());
         response.setRole(user.getRole().toString());
-        response.setUserId(customer.getId());
+        response.setUserId(admin.getId());
         return response;
     }
 

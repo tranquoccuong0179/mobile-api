@@ -59,8 +59,8 @@ public class SlotServiceImpl implements SlotService {
             response.setId(slot.getId());
             response.setStartTime(slot.getStartTime());
             response.setEndTime(slot.getEndTime());
-            response.setSlotDate(slot.getSlotDate());
-            response.setFieldId(slot.getField().getId());
+//            response.setSlotDate(slot.getSlotDate());
+//            response.setFieldId(slot.getField().getId());
             list.add(response);
         }
         return list;
@@ -74,8 +74,8 @@ public class SlotServiceImpl implements SlotService {
         response.setId(slot.getId());
         response.setStartTime(slot.getStartTime());
         response.setEndTime(slot.getEndTime());
-        response.setSlotDate(slot.getSlotDate());
-        response.setFieldId(slot.getField().getId());
+//        response.setSlotDate(slot.getSlotDate());
+//        response.setFieldId(slot.getField().getId());
         return response;
     }
 

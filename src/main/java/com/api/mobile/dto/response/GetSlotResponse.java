@@ -13,6 +13,4 @@ public class GetSlotResponse {
     private UUID id;
     private Time startTime;
     private Time endTime;
-    private Date slotDate;
-    private UUID fieldId;
 }
