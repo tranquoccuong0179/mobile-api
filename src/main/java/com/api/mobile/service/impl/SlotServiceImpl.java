@@ -98,4 +98,20 @@ public class SlotServiceImpl implements SlotService {
         }
         return false;
     }
+
+    @Override
+    public List<GetSlotResponse> getSlotByField(UUID id) {
+        Field field = fieldRepository.findById(id).orElse(null);
+        List<Slot> slots = slotRepository.findByFieldId(field.getId());
+        List<GetSlotResponse> responses = new ArrayList<>();
+        for (Slot slot : slots) {
+            GetSlotResponse response = new GetSlotResponse();
+            response.setId(slot.getId());
+            response.setStartTime(slot.getStartTime());
+            response.setEndTime(slot.getEndTime());
+            responses.add(response);
+        }
+
+        return responses;
+    }
 }

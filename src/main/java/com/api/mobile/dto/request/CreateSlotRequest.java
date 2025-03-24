@@ -12,6 +12,5 @@ import java.util.UUID;
 public class CreateSlotRequest {
     private Time startTime;
     private Time endTime;
-    private Date slotDate;
-    private UUID fieldId; // Để liên kết với Field
+    private UUID fieldId;
 }

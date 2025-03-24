@@ -31,6 +31,7 @@ public class BookingServiceImpl implements BookingService {
         Booking booking = new Booking();
         booking.setField(field);
         booking.setSlot(slot);
+        booking.setUser(user);
         booking.setDate(request.getDate());
         booking.setCreatedAt(LocalDateTime.now());
         booking.setUpdatedAt(LocalDateTime.now());

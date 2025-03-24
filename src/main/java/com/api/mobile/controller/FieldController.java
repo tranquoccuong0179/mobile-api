@@ -2,10 +2,7 @@ package com.api.mobile.controller;
 
 import com.api.mobile.dto.request.CreateFieldRequest;
 import com.api.mobile.dto.request.UpdateFieldRequest;
-import com.api.mobile.dto.response.APIResponse;
-import com.api.mobile.dto.response.CreateFieldResponse;
-import com.api.mobile.dto.response.GetFieldResponse;
-import com.api.mobile.dto.response.UpdateFieldResponse;
+import com.api.mobile.dto.response.*;
 import com.api.mobile.service.FieldService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -34,9 +32,9 @@ public class FieldController {
         List<GetFieldResponse> response = fieldService.getAllField();
         return ResponseEntity.ok(new APIResponse<>("200", "List thành công", response));
     }
-    @GetMapping(value = "/get-id/{id}")
-    public ResponseEntity<APIResponse<GetFieldResponse>> getbyid(@PathVariable UUID id){
-        GetFieldResponse response = fieldService.getFieldById(id);
+    @GetMapping(value = "/get-id-by-user/{id}")
+    public ResponseEntity<APIResponse<GetFieldResponseUser>> getbyid(@PathVariable UUID id, @RequestParam(required = false) Date date){
+        GetFieldResponseUser response = fieldService.getFieldById(id, date);
         return ResponseEntity.ok(new APIResponse<>("200", "Field thành công", response));
     }
     @PutMapping(value = "/update/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -55,6 +53,12 @@ public class FieldController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new APIResponse<>(HttpStatus.NOT_FOUND.toString(), "Không tìm thấy Field để xóa", null));
         }
+    }
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping(value = "/get-id-by-admin/{id}")
+    public ResponseEntity<APIResponse<GetFieldResponse>> getbyid(@PathVariable UUID id){
+        GetFieldResponse response = fieldService.getFieldByIdAdmin(id);
+        return ResponseEntity.ok(new APIResponse<>("200", "Field thành công", response));
     }
 
 }

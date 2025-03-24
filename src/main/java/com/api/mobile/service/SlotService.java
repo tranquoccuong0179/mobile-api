@@ -15,4 +15,5 @@ public interface SlotService {
     GetSlotResponse getSlotById(UUID id);
     UpdateSlotResponse updateSlot(UUID id, UpdateSlotRequest request);
     boolean deleteSlot(UUID id);
+    List<GetSlotResponse> getSlotByField(UUID id);
 }

@@ -60,4 +60,10 @@ public class SlotController {
                     .body(new APIResponse<>(HttpStatus.NOT_FOUND.toString(), "Không tìm thấy Slot để xóa", null));
         }
     }
+
+    @GetMapping(value = "/get-id-by-field/{id}")
+    public ResponseEntity<APIResponse<List<GetSlotResponse>>> getByField(@PathVariable UUID id) {
+        List<GetSlotResponse> response = slotService.getSlotByField(id);
+        return ResponseEntity.ok(new APIResponse<>("200", "Lấy Slot thành công", response));
+    }
 }

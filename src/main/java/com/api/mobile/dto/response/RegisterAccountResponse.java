@@ -19,5 +19,4 @@ public class RegisterAccountResponse {
     private String phone;
     private String fullName;
     private String role;
-    private UUID userId;
 }

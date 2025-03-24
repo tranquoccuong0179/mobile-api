@@ -2,13 +2,11 @@ package com.api.mobile.service.impl;
 
 import com.api.mobile.dto.request.CreateFieldRequest;
 import com.api.mobile.dto.request.UpdateFieldRequest;
-import com.api.mobile.dto.response.CreateFieldResponse;
+import com.api.mobile.dto.response.*;
 
-import com.api.mobile.dto.response.GetCategoryResponse;
-import com.api.mobile.dto.response.GetFieldResponse;
-import com.api.mobile.dto.response.UpdateFieldResponse;
 import com.api.mobile.model.Category;
 import com.api.mobile.model.Field;
+import com.api.mobile.model.Slot;
 import com.api.mobile.repository.CategoryRepository;
 import com.api.mobile.repository.FieldRepository;
 import com.api.mobile.service.FieldService;
@@ -16,10 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -64,10 +59,9 @@ public class FieldServiceImpl implements FieldService {
     }
 
     @Override
-    public GetFieldResponse getFieldById(UUID id) {
+    public GetFieldResponseUser getFieldById(UUID id, Date date) {
         Field field = fieldRepository.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy"));
-        GetFieldResponse response = new GetFieldResponse();
-        response.setId(field.getId());
+        GetFieldResponseUser response = new GetFieldResponseUser();
         response.setLocation(field.getLocation());
         response.setPrice(field.getPrice());
         GetCategoryResponse responseCategory = new GetCategoryResponse();
@@ -75,6 +69,13 @@ public class FieldServiceImpl implements FieldService {
         responseCategory.setName(field.getCategory().getName());
         responseCategory.setArea(field.getCategory().getArea());
         response.setCategory(responseCategory);
+        List<GetSlotBookingResponse> slotResponses = field.getSlots().stream().map(slot -> {
+            boolean isBooked = slot.getBookings().stream()
+                    .anyMatch(booking -> booking.getDate().equals(date));
+
+            return new GetSlotBookingResponse(slot.getStartTime(), slot.getEndTime(), isBooked);
+        }).toList();
+        response.setSlots(slotResponses);
         return response;
     }
 
@@ -90,6 +91,20 @@ public class FieldServiceImpl implements FieldService {
         response.setId(field.getId());
         response.setLocation(field.getLocation());
         response.setPrice(field.getPrice());
+        return response;
+    }
+
+    @Override
+    public GetFieldResponse getFieldByIdAdmin(UUID id) {
+        Field field = fieldRepository.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy"));
+        GetFieldResponse response = new GetFieldResponse();
+        response.setLocation(field.getLocation());
+        response.setPrice(field.getPrice());
+        GetCategoryResponse responseCategory = new GetCategoryResponse();
+        responseCategory.setId(field.getCategory().getId());
+        responseCategory.setName(field.getCategory().getName());
+        responseCategory.setArea(field.getCategory().getArea());
+        response.setCategory(responseCategory);
         return response;
     }
 
