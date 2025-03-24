@@ -8,6 +8,7 @@ import com.api.mobile.dto.response.RegisterAccountResponse;
 import com.api.mobile.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,5 +30,12 @@ public class AccountController {
     public ResponseEntity<APIResponse<AuthenticationResponse>> auth(@RequestBody AuthenticateRequest request) {
         AuthenticationResponse response = userService.Auth(request);
         return ResponseEntity.ok().body(new APIResponse<>("200", "Login Successfull", response));
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @PostMapping("/register/admin")
+    public ResponseEntity<APIResponse<RegisterAccountResponse>> registerAdmin(@RequestBody RegisterAccountRequest request) {
+        RegisterAccountResponse response = userService.RegisterAdmin(request);
+        return ResponseEntity.ok().body(new APIResponse<>("200", "Create Successfull", response));
     }
 }

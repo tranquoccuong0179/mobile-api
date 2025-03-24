@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -58,7 +57,6 @@ public class SlotServiceImpl implements SlotService {
             response.setId(slot.getId());
             response.setStartTime(slot.getStartTime());
             response.setEndTime(slot.getEndTime());
-            response.setFieldId(slot.getField().getId());
             list.add(response);
         }
         return list;
@@ -72,7 +70,6 @@ public class SlotServiceImpl implements SlotService {
         response.setId(slot.getId());
         response.setStartTime(slot.getStartTime());
         response.setEndTime(slot.getEndTime());
-        response.setFieldId(slot.getField().getId());
         return response;
     }
 
@@ -95,11 +92,8 @@ public class SlotServiceImpl implements SlotService {
 
     @Override
     public boolean deleteSlot(UUID id) {
-        Optional<Slot> slot = slotRepository.findById(id);
-        if (slot.isPresent()) {
-            slot.get().setActive(false);
-            slot.get().setUpdatedAt(LocalDateTime.now());
-            slotRepository.save(slot.get());
+        if (slotRepository.existsById(id)) {
+            slotRepository.deleteById(id);
             return true;
         }
         return false;
