@@ -62,6 +62,7 @@ public class BookingServiceImpl implements BookingService {
             GetHistoryResponse response = new GetHistoryResponse();
             Field field = fieldRepository.findById(booking.getField().getId()).get();
             Category category = field.getCategory();
+            response.setId(booking.getId());
             response.setName(category.getName());
             response.setLocation(field.getLocation());
             response.setAmount(field.getPrice());
@@ -78,6 +79,7 @@ public class BookingServiceImpl implements BookingService {
             GetHistoryResponse response = new GetHistoryResponse();
             Field field = fieldRepository.findById(booking.getField().getId()).get();
             Category category = field.getCategory();
+            response.setId(booking.getId());
             response.setName(category.getName());
             response.setLocation(field.getLocation());
             response.setAmount(field.getPrice());
