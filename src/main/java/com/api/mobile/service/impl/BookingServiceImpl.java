@@ -1,9 +1,7 @@
 package com.api.mobile.service.impl;
 
 import com.api.mobile.dto.request.CreateBookingRequest;
-import com.api.mobile.dto.response.CreateBookingResponse;
-import com.api.mobile.dto.response.GetFieldResponse;
-import com.api.mobile.dto.response.GetSlotResponse;
+import com.api.mobile.dto.response.*;
 import com.api.mobile.model.*;
 import com.api.mobile.repository.*;
 import com.api.mobile.service.BookingService;
@@ -12,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -50,6 +50,40 @@ public class BookingServiceImpl implements BookingService {
         response.setField(fieldResponse);
         response.setSlot(slotResponse);
         return response;
+    }
+
+    @Override
+    public List<GetHistoryResponse> getAllBookings() {
+        UUID userId = AuthenUtil.getCurrentUserId();
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        List<GetHistoryResponse> responses = new ArrayList<>();
+        List<Booking> bookings = bookingRepository.findByUserId(user.getId());
+        for (Booking booking : bookings) {
+            GetHistoryResponse response = new GetHistoryResponse();
+            Field field = fieldRepository.findById(booking.getField().getId()).get();
+            Category category = field.getCategory();
+            response.setName(category.getName());
+            response.setLocation(field.getLocation());
+            response.setAmount(field.getPrice());
+            responses.add(response);
+        }
+        return responses;
+    }
+
+    @Override
+    public List<GetHistoryResponse> getAllBookingsByAdmin() {
+        List<GetHistoryResponse> responses = new ArrayList<>();
+        List<Booking> bookings = bookingRepository.findAll();
+        for (Booking booking : bookings) {
+            GetHistoryResponse response = new GetHistoryResponse();
+            Field field = fieldRepository.findById(booking.getField().getId()).get();
+            Category category = field.getCategory();
+            response.setName(category.getName());
+            response.setLocation(field.getLocation());
+            response.setAmount(field.getPrice());
+            responses.add(response);
+        }
+        return responses;
     }
 
 }
