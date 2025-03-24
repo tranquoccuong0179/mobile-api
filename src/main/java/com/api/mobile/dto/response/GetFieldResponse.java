@@ -16,4 +16,5 @@ public class GetFieldResponse {
     private UUID id;
     private String location;
     private double price;
+    private GetCategoryResponse category;
 }

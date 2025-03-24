@@ -23,6 +23,7 @@ public class CategoryServiceImpl implements CategoryService {
         Category category = new Category();
         category.setName(request.getName());
         category.setArea(request.getArea());
+        category.setActive(true);
         category.setCreatedAt(LocalDateTime.now());
         category.setUpdatedAt(LocalDateTime.now());
         categoryRepository.save(category);

@@ -26,31 +26,31 @@ public class FieldController {
     @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<APIResponse<CreateFieldResponse>> create(@RequestBody CreateFieldRequest request){
         CreateFieldResponse response = fieldService.createField(request);
-        return ResponseEntity.ok(new APIResponse<>(HttpStatus.OK.toString(), "Tao thành công", response));
+        return ResponseEntity.ok(new APIResponse<>("200", "Tao thành công", response));
     }
 
     @GetMapping(value = "/get-all")
     public ResponseEntity<APIResponse<List<GetFieldResponse>>> getAll(){
         List<GetFieldResponse> response = fieldService.getAllField();
-        return ResponseEntity.ok(new APIResponse<>(HttpStatus.OK.toString(), "List thành công", response));
+        return ResponseEntity.ok(new APIResponse<>("200", "List thành công", response));
     }
     @GetMapping(value = "/get-id/{id}")
     public ResponseEntity<APIResponse<GetFieldResponse>> getbyid(@PathVariable UUID id){
         GetFieldResponse response = fieldService.getFieldById(id);
-        return ResponseEntity.ok(new APIResponse<>(HttpStatus.OK.toString(), "Field thành công", response));
+        return ResponseEntity.ok(new APIResponse<>("200", "Field thành công", response));
     }
     @PutMapping(value = "/update/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<APIResponse<UpdateFieldResponse>> update(@PathVariable UUID id, @RequestBody UpdateFieldRequest request) {
         UpdateFieldResponse response = fieldService.updateField(id, request);
-        return ResponseEntity.ok(new APIResponse<>(HttpStatus.OK.toString(), "Cập nhật thành công", response));
+        return ResponseEntity.ok(new APIResponse<>("200", "Cập nhật thành công", response));
     }
     @DeleteMapping(value = "/delete/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<APIResponse<String>> delete(@PathVariable UUID id) {
         boolean deleted = fieldService.deleteField(id);
         if (deleted) {
-            return ResponseEntity.ok(new APIResponse<>(HttpStatus.OK.toString(), "Xóa thành công", null));
+            return ResponseEntity.ok(new APIResponse<>("200", "Xóa thành công", null));
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new APIResponse<>(HttpStatus.NOT_FOUND.toString(), "Không tìm thấy Field để xóa", null));

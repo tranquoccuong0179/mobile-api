@@ -20,9 +20,8 @@ import java.util.List;
 @Getter
 @Setter
 public class Slot extends BaseEntity{
-    Time startTime;
-    Time endTime;
-    Date slotDate;
+    private Time startTime;
+    private Time endTime;
     @ManyToOne
     @JoinColumn(name = "field_id")
     @JsonIgnore

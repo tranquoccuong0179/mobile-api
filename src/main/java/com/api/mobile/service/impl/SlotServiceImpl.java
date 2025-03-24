@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -34,7 +35,6 @@ public class SlotServiceImpl implements SlotService {
         Slot slot = new Slot();
         slot.setStartTime(request.getStartTime());
         slot.setEndTime(request.getEndTime());
-        slot.setSlotDate(request.getSlotDate());
         slot.setField(field);
         slot.setCreatedAt(LocalDateTime.now());
         slot.setUpdatedAt(LocalDateTime.now());
@@ -45,7 +45,6 @@ public class SlotServiceImpl implements SlotService {
         response.setId(slot.getId());
         response.setStartTime(slot.getStartTime());
         response.setEndTime(slot.getEndTime());
-        response.setSlotDate(slot.getSlotDate());
         response.setFieldId(slot.getField().getId());
         return response;
     }
@@ -59,7 +58,6 @@ public class SlotServiceImpl implements SlotService {
             response.setId(slot.getId());
             response.setStartTime(slot.getStartTime());
             response.setEndTime(slot.getEndTime());
-            response.setSlotDate(slot.getSlotDate());
             response.setFieldId(slot.getField().getId());
             list.add(response);
         }
@@ -74,7 +72,6 @@ public class SlotServiceImpl implements SlotService {
         response.setId(slot.getId());
         response.setStartTime(slot.getStartTime());
         response.setEndTime(slot.getEndTime());
-        response.setSlotDate(slot.getSlotDate());
         response.setFieldId(slot.getField().getId());
         return response;
     }
@@ -85,7 +82,6 @@ public class SlotServiceImpl implements SlotService {
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy Slot với id: " + id));
         slot.setStartTime(request.getStartTime());
         slot.setEndTime(request.getEndTime());
-        slot.setSlotDate(request.getSlotDate());
         slot.setUpdatedAt(LocalDateTime.now());
         slotRepository.save(slot);
 
@@ -93,15 +89,17 @@ public class SlotServiceImpl implements SlotService {
         response.setId(slot.getId());
         response.setStartTime(slot.getStartTime());
         response.setEndTime(slot.getEndTime());
-        response.setSlotDate(slot.getSlotDate());
         response.setFieldId(slot.getField().getId());
         return response;
     }
 
     @Override
     public boolean deleteSlot(UUID id) {
-        if (slotRepository.existsById(id)) {
-            slotRepository.deleteById(id);
+        Optional<Slot> slot = slotRepository.findById(id);
+        if (slot.isPresent()) {
+            slot.get().setActive(false);
+            slot.get().setUpdatedAt(LocalDateTime.now());
+            slotRepository.save(slot.get());
             return true;
         }
         return false;

@@ -20,10 +20,6 @@ import java.util.List;
 public class Field extends BaseEntity{
     private String location;
     private double price;
-    @ManyToOne
-    @JoinColumn(name = "admin_id")
-    @JsonIgnore
-    private Admin admin;
     @OneToMany(mappedBy = "field")
     private List<Slot> slots;
     @ManyToOne

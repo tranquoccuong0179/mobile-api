@@ -10,7 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
+import java.sql.Date;
 
 @Entity
 @NoArgsConstructor
@@ -19,14 +19,14 @@ import java.time.LocalDate;
 @Setter
 public class Booking extends BaseEntity{
     @ManyToOne
-    @JoinColumn(name = "customer_id")
+    @JoinColumn(name = "user_id")
     @JsonIgnore
-    private Customer customer;
+    private User user;
     @ManyToOne
     @JoinColumn(name = "field_id")
     @JsonIgnore
     private Field field;
-    private LocalDate date;
+    private Date date;
     @ManyToOne
     @JoinColumn(name = "slot_id")
     @JsonIgnore
