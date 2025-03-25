@@ -10,10 +10,14 @@ import com.api.mobile.repository.FieldRepository;
 import com.api.mobile.repository.PaymentRepository;
 import com.api.mobile.service.PaymentService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.hibernate.query.Order;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -23,6 +27,7 @@ import java.util.*;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class PaymentServiceImpl implements PaymentService {
     private final PaymentRepository paymentRepository;
     private final BookingRepository bookingRepository;
@@ -88,4 +93,28 @@ public class PaymentServiceImpl implements PaymentService {
 
         return paymentUrl;
     }
+
+    @Override
+    public boolean processPaymentCallback(Map<String, String> queryParams, HttpServletResponse response) throws IOException {
+        String vnp_ResponseCode = queryParams.get("vnp_ResponseCode");
+        UUID bookingId = UUID.fromString(queryParams.get("vnp_OrderInfo"));
+        long vnp_Amount = Long.parseLong(queryParams.get("vnp_Amount")) / 100;
+
+        Optional<Booking> booking = bookingRepository.findById(bookingId);
+        Payment payment = paymentRepository.findByBookingId(booking.get().getId()).orElse(null);
+
+        if (vnp_ResponseCode == "00") {
+            payment.setStatus(PaymentEnum.SUCCESSFUL);
+            payment.setUpdatedAt(LocalDateTime.now());
+            paymentRepository.save(payment);
+            return true;
+        } else if (vnp_ResponseCode == "01") {
+            payment.setStatus(PaymentEnum.FAILED);
+            payment.setUpdatedAt(LocalDateTime.now());
+            paymentRepository.save(payment);
+            return true;
+        }
+        return true;
+    }
 }
+
